@@ -45,6 +45,11 @@
   <meta charset="UTF-8">
   <title>Project IoT: Quantum-Inspired  Green  Hydrogen Forecasting</title>
   <style>
+    body {
+      background-color: #0d1a26;
+      color: #e0e6eb; 
+      font-family: 'Space Mono', monospace; 
+    }
     .publication-title {
       font-size: 3rem;
       font-weight: bold;
@@ -54,14 +59,15 @@
     }
 
     .title-text {
-    background: linear-gradient(90deg, #00f260, #0575e6, #ff0080, #7928ca);
+    background: linear-gradient(90deg, #00c6ff,#20e3b2, #0072ff);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow:
-    2px 2px 4px rgba(0, 0, 0, 0.1),
-    4px 4px 8px rgba(0, 0, 0, 0.2);
+    0px 0px 8px rgba(0, 200, 255, 0.5),
+    0px 0px 15px rgba(32, 227, 178, 0.3);
     animation: gradientShift 30s infinite ease-in-out;
+    font-family: 'Orbitron', sans-serif;
   }
 
     @keyframes gradientShift {
@@ -70,7 +76,7 @@
       100% { background-position: 48% 50%; }
     }
     .publication-links .button {
-  background: linear-gradient(45deg, #00f260, #0575e6, #ff0080, #7928ca);
+  background: linear-gradient(45deg, #00c6ff, #0072ff, #20e3b2);
   background-size: 300% 300%;
   color: white !important;
   font-weight: 600;
@@ -88,13 +94,72 @@
 .publication-links .button .icon img {
   filter: drop-shadow(0 0 1px rgba(0,0,0,0.7));
   vertical-align: middle;
+  color: #e0e6eb !important;
 }
 
 /* 让按钮间距更合理 */
 .publication-links .link-block {
   margin: 0 0.3rem;
 }
+.title.is-3 {
+      background: linear-gradient(90deg,#1A4D2E, #20E3B2, #112D4E, #0072FF);
+      color:white !important; 
+      padding: 15px; 
+      border-radius: 12px; 
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(32, 227, 178, 0.2); 
+      text-align: center;
+      margin-top: 3rem !important; 
+      margin-bottom: 2rem !important; 
+      font-family: 'Orbitron', sans-serif; 
+    }
 
+    .video-container, .image-container {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 198, 255, 0.3); 
+      overflow: hidden;
+      background: linear-gradient(45deg, #1c3d52, #0d1a26, #1c3d52); 
+      padding: 15px; 
+      margin-bottom: 3rem;
+    }
+
+    .footer {
+      background-color: #081118;
+      color: #a0a6ad;
+      padding: 3rem 1.5rem;
+      border-top: 1px solid #1a2a3a; 
+    }
+    .footer a {
+      color: #20e3b2; 
+      text-decoration: underline;
+    }
+    .footer a:hover {
+      color: #00c6ff; 
+    }
+    .hero-body {
+        padding-bottom: 0 !important; 
+    }
+    .publication-authors .author-block {
+      color: #a0a6ad; 
+    }
+    .publication-authors a {
+      color: #00c6ff; 
+    }
+    .publication-authors a:hover {
+      color: #20e3b2; 
+    }
+    .content strong {
+      color: #20e3b2; 
+    }
+    .content span {
+      color: #00c6ff; 
+    }
+    .content ul li {
+      margin-bottom: 0.5rem;
+    }
+    .content ul li strong {
+        color: #00c6ff; 
+    }
   </style>
 </head>
 <body>
@@ -180,7 +245,7 @@
     <div class="columns is-centered">
       <div class="column is-full">
       <div class="content">
-            <h2 class="title is-3 has-text-centered" style="background: linear-gradient(45deg, #f200b571, #eb419f8e, #0077ff5b, #2881cad7); color: white; padding: 10px; border-radius: 10px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">
+            <h2 class="title is-3 has-text-centered" >
             Welcome to Use This Project
             </h2>
           <div class="level-set has-text-justified">
@@ -206,13 +271,14 @@
     <div class="columns is-centered">
       <div class="column is-full">
         <div class="content">
-         <h2 class="title is-3" style="background: linear-gradient(45deg, #f200b571, #eb419f8e, #0077ff5b, #2881cad7); color: white; padding: 10px; border-radius: 10px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); text-align: center;">
+         <h2 class="title is-3" >
            Overview
          </h2>
         <div class="content has-text-justified">
-            </strong>A quantum-inspired probabilistic forecasting function is implemented using classical ESP32 logic.​
-
-The function imitates quantum-like superposition by assigning probabilistic weights to possible outcomes (increase, same, or decrease in hydrogen output).​
+          <p>
+          This project simulates a **quantum-inspired green hydrogen production forecasting system** using classical ESP32 microcontroller logic.
+                The forecasting function mimics **quantum-like superposition** by assigning probabilistic weights to possible outcomes: an increase, maintenance, or decrease in hydrogen output.
+                Our goal is to explore how these concepts can be applied to sustainable energy management.
           </p>
           <img src="static/images/components.jpg" alt="Teaser GIF" height="100%">
           <p class="subtitle has-text-centered">
@@ -233,14 +299,18 @@ The function imitates quantum-like superposition by assigning probabilistic weig
     <div class="columns is-centered">
       <div class="column is-full">
         <div class="content">
-         <h2 class="title is-3" style="background: linear-gradient(45deg, #f200b571, #eb419f8e, #0077ff5b, #2881cad7); color: white; padding: 10px; border-radius: 10px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); text-align: center;">
+         <h2 class="title is-3">
            Method
          </h2>
           <div class="content has-text-justified" style="font-size: 4.5 rem;"></div>
-          <strong>Overview of Smart IoT Pet Feeding.</strong>
-          <strong>Feeding Automation</strong> 
-          <strong>Scheduled Feeding</strong> 
-           <strong>Weight Monitoring</strong> 
+          <strong>Simulation Architecture:</strong>
+              <ul style="list-style-type: disc; margin-left: 20px;">
+                <li><strong>Solar Input (<span class="icon"><i class="fas fa-sun"></i></span>):</strong> LDR sensor to simulate light intensity.</li>
+                <li><strong>Water Input (<span class="icon"><i class="fas fa-tint"></i></span>):</strong> Potentiometer to simulate electrolyzer water flow or level.</li>
+                <li><strong>Central Processing (<span class="icon"><i class="fas fa-microchip"></i></span>):</strong> ESP32 module responsible for the quantum-inspired forecasting logic.</li>
+                <li><strong>Forecasting Output (<span class="icon"><i class="fas fa-lightbulb"></i></span>):</strong> LEDs visually indicate predicted hydrogen production levels (color and brightness).</li>
+                <li><strong>Data Logging (<span class="icon"><i class="fas fa-terminal"></i></span>):</strong> Serial Monitor for detailed analysis of inputs, states, and results.</li>
+              </ul>rong>Weight Monitoring</strong> 
           </div>
           </p>
           </p>
@@ -263,8 +333,8 @@ The function imitates quantum-like superposition by assigning probabilistic weig
 <!--End BibTex citation -->
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code> Commingh Soon...
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code> Comming Soon...
 </code></pre>
   </div>
 </section>
