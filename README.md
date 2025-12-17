@@ -24,3 +24,20 @@ Welcome
 * **Alve**
     * **Rol:** Circuit Implementation & Visualization, Documentation​ 
     * **Description:** Build  Wokwi circuit, configure LEDs for forecast display and create the final visual presentation materials., manage documentation of total workflow.​
+
+---
+
+## 💻 Project Source Code & Simulation
+
+The complete source code and circuit simulation files are located in the `wokwi_project/` directory.
+
+### File Structure:
+
+* `wokwi_project/sketch.ino`: The main ESP32 firmware code (C++).
+* `wokwi_project/diagram.json`: The Wokwi circuit connection diagram.
+* `wokwi_project/libraries.txt`: List of required libraries.
+
+### How to Run:
+
+1.  The easiest way to run this project is to upload these files back to the **Wokwi** online simulator.
+2.  Alternatively, you can open `sketch.ino` in the Arduino IDE, install the required libraries (`Adafruit GFX Library`, `Adafruit SSD1306`), and upload it to a physical ESP32 board wired according to the diagram.

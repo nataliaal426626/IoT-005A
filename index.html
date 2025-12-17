@@ -333,13 +333,123 @@
 <!--End BibTex citation -->
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
-    <h2 class="title is-3">BibTeX</h2>
-    <pre><code> Comming Soon...
-</code></pre>
+    <h2 class="title is-3">Method & System Architecture</h2>
+<div class="content has-text-justified">
+  <p>
+    Our final system implements a <strong>hybrid simulation architecture</strong>. It combines real-world sensor data with digitally generated patterns to create a robust testing environment for the quantum-inspired algorithm. The system is composed of five main functional blocks connected to an ESP32 microcontroller.
+  </p>
+  
+  <strong>System Components & Data Flow:</strong>
+  <ul style="list-style-type: disc; margin-left: 20px;">
+    <li><strong>Hybrid Inputs (<span class="icon"><i class="fas fa-random"></i></span>):</strong> 
+      <ul>
+        <li><strong>Solar Data:</strong> A weighted mix of real-world data from an <strong>LDR sensor</strong> and a digitally generated sine wave pattern.</li>
+        <li><strong>Water Data:</strong> Purely digitally generated sine wave patterns to simulate varying electrolyzer water levels.</li>
+      </ul>
+    </li>
+    <li><strong>Central Processing Unit (<span class="icon"><i class="fas fa-microchip"></i></span>):</strong> The <strong>ESP32</strong> runs the quantum-inspired probabilistic forecasting algorithm, including a memory weight feature for output stabilization.</li>
+    <li><strong>Dual-OLED Visualization (HMI) (<span class="icon"><i class="fas fa-desktop"></i></span>):</strong>
+      <ul>
+        <li><strong>OLED 1 (Status Monitor):</strong> Displays real-time input percentages and bar graphs for Solar, Water, and H2 Potential, along with the final forecast text.</li>
+        <li><strong>OLED 2 (Trend Analysis):</strong> Draws a live, scrolling line graph showing the history of the predicted H2 production potential.</li>
+      </ul>
+    </li>
+    <li><strong>Forecast Indicator (<span class="icon"><i class="fas fa-lightbulb"></i></span>):</strong> An <strong>RGB LED</strong> provides immediate visual feedback of the forecast (Green=Increase, Blue=Stable, Red=Decrease).</li>
+    <li><strong>Data Logging (<span class="icon"><i class="fas fa-file-csv"></i></span>):</strong> Outputs CSV-formatted data via the Serial port for external analysis.</li>
+  </ul>
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+  <img src="static/images/final_system_architecture.png" alt="Final System Architecture Diagram" style="display: block; width: 100%; border-radius: 15px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">
+  <p class="subtitle has-text-centered">Figure 1: Complete System Architecture Diagram (Wokwi Simulation)</p>
+</div>
+</section>
+
+  <section class="section hero is-small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="content">
+          <h2 class="title is-3">Results & Demonstration</h2>
+          
+          <div class="content has-text-justified">
+            <p>
+              The final system successfully demonstrates the capability of the quantum-inspired algorithm to process hybrid inputs and generate stable, probabilistic forecasts. The dual-OLED setup provides a comprehensive Human-Machine Interface (HMI) for real-time monitoring.
+            </p>
+          </div>
+
+          <div class="columns is-centered" style="margin-top: 2rem;">
+            <div class="column is-half has-text-centered">
+              <h4 class="title is-4">OLED 1: Status Monitor</h4>
+              <img src="static/images/oled1_status.png" alt="OLED 1 Status Monitor showing bar graphs" style="width: 100%; height: auto; aspect-ratio: 128 / 64; object-fit: contain; background-color: black;; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+              <p class="subtitle is-6">Real-time inputs and forecast status with bar graphs.</p>
+            </div>
+            
+            <div class="column is-half has-text-centered">
+              <h4 class="title is-4">OLED 2: Live Trend Graph</h4>
+              <img src="static/images/oled2_graph.png" alt="OLED 2 Live Graph showing H2 trend" style="width: 100%; height: auto; aspect-ratio: 128 / 64; object-fit: contain; background-color: black;; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+              <p class="subtitle is-6">Live scrolling graph of H2 production potential over time.</p>
+            </div>
+          </div>
+
+          <div class="content has-text-justified" style="margin-top: 1.5rem;">
+            <p>
+              The RGB LED complements these displays, providing immediate, at-a-glance feedback of the forecast state, changing color smoothly as predictions shift based on the probabilistic model.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
+<section class="section hero is-small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="content">
+          <h2 class="title is-3">Key Algorithm Features</h2>
+          <ul>
+            <li><strong>Quantum-Inspired Probabilistic Forecasting:</strong> Instead of deterministic outputs, the system calculates probabilities for three superpositioned states (Increase, Stable, Decrease) and collapses them to a single decision, mimicking quantum measurement uncertainty.</li>
+            <li><strong>Memory Weight Stabilization:</strong> To prevent erratic switching between forecasts when probabilities are close, a "memory" factor adds weight to the previous decision in the next calculation. This introduces realistic system inertia and stability.</li>
+            <li><strong>Hybrid Data Fusion:</strong> The system intelligently combines real-time sensor readings with generated data patterns, allowing for robust testing across a wide range of simulated environmental scenarios.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<section class="section hero is-small" style="background-color: #0f2030;"> <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="content">
+          <h2 class="title is-3" style="color: #20e3b2;">My Role & Contributions (Natalia)</h2>
+          
+          <div class="content has-text-justified">
+            <p>
+              My primary focus was on the overall <strong>system design, simulation infrastructure, and project coordination</strong>. I designed the complete ESP32-based circuit architecture in Wokwi, ensuring all simulated components interacted correctly to support the quantum-inspired algorithm.
+            </p>
+            <p>Key contributions included:</p>
+            <ul>
+              <li>
+                <strong>Hybrid Simulation Implementation:</strong> To handle diverse real-world conditions, I designed and implemented the hybrid approach where solar input combines real LDR readings with digitally generated patterns. This allowed for robust testing of stable, extreme, and intermediate scenarios without relying solely on physical hardware.
+              </li>
+              <li>
+                <strong>Data Analysis & Validation:</strong> I analyzed system behavior in depth using the Serial Monitor. By exporting simulation data in CSV format, I observed and validated how solar input, water availability, and hydrogen energy potential evolved over time to ensure the algorithm's output made sense.
+              </li>
+              <li>
+                <strong>Integration Coordination:</strong> I acted as the bridge between team members, coordinating the crucial integration phase between the algorithm development and the visualization components to ensure the full workflow was consistent and functional.
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
   <footer class="footer">
   <div class="container">
