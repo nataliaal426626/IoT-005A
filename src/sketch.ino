@@ -1,7 +1,7 @@
 // ===========================================================
 // Quantum-Inspired Green Hydrogen Forecasting (ESP32 + RGB LED)
 // Full Version with 3-Bar Serial Graph + HYBRID SENSOR MODE
-// With Quantum Memory Weight (Stabilization) + OLED Bar Graph
+// With Quantum Memory Weight (Stabilization) + OLED Bar Graph + Live Line Graph
 // ===========================================================
 
 #include <Wire.h>
@@ -11,9 +11,8 @@
 // --- SCREEN CONFIG ---
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-
-int graphX = 0;
-float previousValue = -1;
+#define GRAPH_WIDTH 128
+#define GRAPH_HEIGHT 50
 
 // --- TWO DISPLAY BUSSES ---
 TwoWire I2Cone = TwoWire(0);
@@ -29,23 +28,23 @@ const int RGB_RED_PIN = 25;
 const int RGB_GREEN_PIN = 26;
 const int RGB_BLUE_PIN = 27;
 
+// --- Variables ---
 int ldrValue = 0;
 int potValue = 0;
-
-// --- ADDED FOR CSV + PLOTTING ---
 int readingCount = 0;
 
-// --- HYBRID CONFIG ---
 float SIM_STRENGTH_SOLAR = 0.30;
-
-// --- MEMORY WEIGHT ---
 String lastForecast = "remain";
 float memoryStrength = 0.25;
 
-// === OLED2 graph buffer (H2 % over time) ===
-#define GRAPH_WIDTH 128
-float graphBuffer[GRAPH_WIDTH] = {0};
-int graphIndex = 0;
+// OLED2 graph variables
+int graphX = 0;
+float previousValue = -1;
+int markerCounter = 0;
+
+// Previous hydrogen production tracking
+float previousHydrogenProduction = -1;
+float previousHydrogenPercentage = -1;
 
 // Function prototypes
 void drawHydrogenGraphOnOLED2(float hydrogenPercent);
@@ -87,6 +86,7 @@ void setup() {
   display2.setCursor(0, 10);
   display2.println("Booting System...");
   display2.display();
+
   delay(1000);
 
   Serial.println();
@@ -128,7 +128,6 @@ void loop() {
 
   float solar = invertedLdrValue / 4095.0;
   float water = potValue / 4095.0;
-
   float energyPotential = (0.6 * solar + 0.4 * water);
 
   float p_increase = energyPotential;
@@ -150,22 +149,53 @@ void loop() {
   p_increase /= total;
   p_same /= total;
   p_decrease /= total;
+  
+  // --- QUANTUM NOISE  ---
+float quantumNoise = (random(-300, 300) / 1000.0);
+
+p_increase += quantumNoise * 0.4;
+p_same     += quantumNoise * -0.2; // inverse coupling
+p_decrease += quantumNoise * 0.4;
+
+// Prevent negatives
+if (p_increase < 0) p_increase = 0;
+if (p_same     < 0) p_same     = 0;
+if (p_decrease < 0) p_decrease = 0;
+
+// Renormalize again
+total = p_increase + p_same + p_decrease;
+p_increase /= total;
+p_same     /= total;
+p_decrease /= total;
+
 
   float r = random(0, 1000) / 1000.0;
 
   String forecast;
   int targetR = 0, targetG = 0, targetB = 0;
 
-  if (r < p_increase) {
-    forecast = "increase";
-    targetG = 255;
-  } else if (r < (p_increase + p_same)) {
+  // Determine forecast based on hydrogen production change
+  float currentHydrogenPercentage = energyPotential * 100;
+  
+  if (previousHydrogenPercentage < 0) {
+    // First reading, default to remain
     forecast = "remain";
     targetB = 255;
   } else {
-    forecast = "decrease";
-    targetR = 255;
+    if (currentHydrogenPercentage > previousHydrogenPercentage) {
+      forecast = "increase";
+      targetG = 255;
+    } else if (currentHydrogenPercentage < previousHydrogenPercentage) {
+      forecast = "decrease";
+      targetR = 255;
+    } else {
+      forecast = "remain";
+      targetB = 255;
+    }
   }
+
+  // Update previous hydrogen percentage
+  previousHydrogenPercentage = currentHydrogenPercentage;
 
   lastForecast = forecast;
 
@@ -189,6 +219,7 @@ void loop() {
   printBarGraph3(solar, water, energyPotential, forecast);
   Serial.println("------------------------------------------------\n");
 
+  // --- OLED1 and OLED2 Bar Graphs ---
   auto updateOLED = [&](Adafruit_SSD1306 &scr) {
     scr.clearDisplay();
     scr.setTextSize(1);
@@ -219,14 +250,15 @@ void loop() {
     scr.display();
   };
 
-  updateOLED(display);
-  updateOLED(display2);
+updateOLED(display); // OLED1 bar + forecast
 
+
+  // --- OLED2 live line graph ---
   drawHydrogenGraphOnOLED2(energyPotential * 100);
 
-  fadeToColor(targetR, targetG, targetB, 800);
+  fadeToColor(targetR, targetG, targetB, 100);
 
-  delay(1500);
+  delay(100);
 }
 
 // ===========================================================
@@ -320,33 +352,44 @@ void fadeToColor(int r, int g, int b, int duration) {
 }
 
 // ===========================================================
-// OLED2 LIVE GRAPH FUNCTION
+// OLED2 LEFT-TO-RIGHT LIVE LINE GRAPH
 // ===========================================================
 void drawHydrogenGraphOnOLED2(float hydrogenPercent) {
 
-  graphBuffer[graphIndex] = hydrogenPercent;
-  graphIndex = (graphIndex + 1) % GRAPH_WIDTH;
+  int y = map(hydrogenPercent, 0, 100, GRAPH_HEIGHT, 0); // invert Y axis
 
-  display2.clearDisplay();
-
-  display2.drawLine(0, 63, 127, 63, WHITE);
-  display2.drawLine(0, 0, 0, 63, WHITE);
-
-  for(int x = 0; x < GRAPH_WIDTH - 1; x++) {
-
-    int currentIndex = (graphIndex + x) % GRAPH_WIDTH;
-    int nextIndex = (graphIndex + x + 1) % GRAPH_WIDTH;
-
-    int y1 = 63 - map(graphBuffer[currentIndex], 0, 100, 0, 63);
-    int y2 = 63 - map(graphBuffer[nextIndex], 0, 100, 0, 63);
-
-    display2.drawLine(x, y1, x+1, y2, WHITE);
+  // Only clear at the start of the graph
+  if (graphX == 0) {
+    display2.clearDisplay();
+    display2.drawLine(0, 0, 0, GRAPH_HEIGHT, WHITE);        // Y-axis
+    display2.drawLine(0, GRAPH_HEIGHT, GRAPH_WIDTH, GRAPH_HEIGHT, WHITE); // X-axis
+    display2.setTextSize(1);
+    display2.setCursor(10, 0);
+    display2.print("H2 Production (%)");
+    previousValue = y;
   }
 
-  display2.setTextSize(1);
-  display2.setCursor(2, 2);
-  display2.println("H2 Production (%)");
+  // Draw connecting line
+  if (previousValue >= 0) {
+    display2.drawLine(graphX - 1, previousValue, graphX, y, WHITE);
+  }
 
+  // Draw marker every few loops
+  markerCounter++;
+  if (markerCounter >= 2) {
+    display2.drawPixel(graphX, y, WHITE);
+    markerCounter = 0;
+  }
+
+  previousValue = y;
+  graphX++;
+
+  // Reset when reaching end
+  if (graphX >= GRAPH_WIDTH) {
+    graphX = 0;
+    previousValue = -1;
+  }
+
+  // **Do not clear display here!** Only draw new points
   display2.display();
 }
-// ===========================================================
